@@ -68,6 +68,11 @@ void PlotData::setVal(const ulong idx, const double nx, const double ny)
 	{
 		x[idx] = nx;
 		y[idx] = ny;
+
+		xmin = xmin > nx ? nx : xmin;
+		xmax = xmax < nx ? nx : xmax;
+		ymin = ymin > ny ? ny : ymin;
+		ymax = ymax < ny ? ny : ymax;
 	}
 }
 void PlotData::getVal(const ulong idx, double &nx, double &ny)

@@ -295,27 +295,30 @@ void PlotWidget::draw()
 	fl_pop_clip();
 }
 
-void PlotWidget::putData(int len, double * x, double * y,
-		                int style, int width, Fl_Color col)
+void PlotWidget::putData(const std::vector<double> &x,
+						 const std::vector<double> &y,
+						 const int                 style,
+						 const int                 width,
+						 const Fl_Color            col)
 {
-	pdptr data = pdptr(new PlotData(len,x,y,style,width,col));
+	pdptr data = pdptr(new PlotData(x,y,style,width,col));
 	double xmin,xmax,ymin,ymax;
 
-	if(!hold)
+	if (!hold)
 		this->data.clear();
-	data->getXlim(xmin,xmax);
-	data->getYlim(ymin,ymax);
-	if(this->data.empty())
+	data->getXlim(xmin, xmax);
+	data->getYlim(ymin, ymax);
+	if (this->data.empty())
 	{
-		lim = {xmin,xmax,ymin,ymax};
+		lim = {xmin, xmax, ymin, ymax};
 		limc = lim;
 	}
 	else
 	{
-		lim = { lim.xl>xmin?xmin:lim.xl,
-				lim.xr<xmax?xmax:lim.xr,
-						lim.yl>ymin?ymin:lim.yl,
-								lim.yr<ymax?ymax:lim.yr
+		lim = { lim.xl > xmin ? xmin : lim.xl,
+				lim.xr < xmax ? xmax : lim.xr,
+				lim.yl > ymin ? ymin : lim.yl,
+				lim.yr < ymax ? ymax : lim.yr
 		};
 		limc = lim;
 	}

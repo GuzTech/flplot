@@ -42,7 +42,7 @@ public:
 	virtual ~PlotWidget();
 	int handle(int event);
 	void draw();
-	void putData(int len, double * x, double * y, int style = FL_SOLID, int width = 1, Fl_Color col = FL_BLACK);
+	void putData(const std::vector<double> &x, const std::vector<double> &y, const int style = FL_SOLID, const int width = 1, const Fl_Color col = FL_BLACK);
 	inline void setGrid(bool on = true) { grid = on; redraw(); }
 	inline void setXLabel(const char * str) { xlabel = str; redraw(); };
 	inline void setYLabel(const char * str) { ylabel = str; redraw(); };

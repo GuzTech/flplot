@@ -14,22 +14,23 @@
 //	}
 //}
 
-void FigureWindow::plot(size_t len,
-		 double * x,
-		 double * y,
-		 const int style,
-		 const int width,
-		 const Fl_Color col,
-		 size_t sbplt) {
-	if(sbplt < rows*cols && sbplt >= 0) {
-		plots[sbplt]->putData(len,x,y,style,width,col);
+void FigureWindow::plot(
+		const std::vector<double> &x,
+		const std::vector<double> &y,
+		const int style,
+		const int width,
+		const Fl_Color col,
+		const size_t sbplt) {
+	if (sbplt < (rows * cols) && sbplt >= 0) {
+		plots[sbplt]->putData(x, y, style, width, col);
 	}
 }
-inline void FigureWindow::plot(size_t len,
-			     double * x,
-				 double * y,
-				 size_t sbplt) {
-	plot(len,x,y,FL_SOLID,1,FL_BLACK,sbplt);
+
+inline void FigureWindow::plot(
+			     const std::vector<double> &x,
+				 const std::vector<double> &y,
+				 const size_t sbplt) {
+	plot(x, y, FL_SOLID, 1, FL_BLACK, sbplt);
 }
 
 void FigureWindow::grid(bool on, const size_t sbplt) {

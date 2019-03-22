@@ -11,6 +11,8 @@
 #include <memory>
 #include <cinttypes>
 #include <FL/fl_draw.H>
+#include <vector>
+
 class PlotData
 {
 private:
@@ -23,9 +25,8 @@ public:
 	int style;
 	int width;
 	Fl_Color col;
-	PlotData(ulong len, int style=FL_SOLID, int width=1, Fl_Color col=FL_BLACK);
-	PlotData(ulong len, double *x, double *y,
-			 int style=FL_SOLID, int width=1, Fl_Color col=FL_BLACK);
+	PlotData(const ulong len, const int style = FL_SOLID, const int width = 1, const Fl_Color col = FL_BLACK);
+	PlotData(const std::vector<double> &x, const std::vector<double> &y, const int style = FL_SOLID, const int width = 1, const Fl_Color col = FL_BLACK);
 	~PlotData();
 
 	void getXlim(double & xmin, double & xmax);

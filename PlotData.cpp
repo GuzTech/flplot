@@ -7,7 +7,10 @@
 
 #include "PlotData.h"
 
-PlotData::PlotData(ulong len, int style, int width, Fl_Color col) {
+PlotData::PlotData(const ulong len,
+				   const int style,
+				   const int width,
+				   const Fl_Color col) {
 	this->style = style;
 	this->width = width;
 	this->col = col;
@@ -15,12 +18,17 @@ PlotData::PlotData(ulong len, int style, int width, Fl_Color col) {
 	this->x = std::shared_ptr<double[]>(new double[len]);
 	this->y = std::shared_ptr<double[]>(new double[len]);
 }
-PlotData::PlotData(ulong len, double *x, double *y,
-		int style, int width, Fl_Color col) {
-	this->style = style;
-	this->width = width;
-	this->col = col;
-	this->len = len;
+
+PlotData::PlotData(const std::vector<double> &x,
+				   const std::vector<double> &y,
+				   const int 				 style,
+				   const int 				 width,
+				   const Fl_Color 			 col)
+	: style(style)
+	, width(width)
+	, col(col)
+	, len(x.size())
+{
 	this->x = std::shared_ptr<double[]>(new double[len]);
 	this->y = std::shared_ptr<double[]>(new double[len]);
 
@@ -31,14 +39,14 @@ PlotData::PlotData(ulong len, double *x, double *y,
 		ymax = ymin;
 		this->x[0] = x[0];
 		this->y[0] = y[0];
-		for(ulong i = 1;i < len;i++)
-		{
+
+		for (ulong i = 1 ; i < len; ++i) {
 			this->x[i] = x[i];
 			this->y[i] = y[i];
-			xmin = xmin>x[i]?x[i]:xmin;
-			xmax = xmax<x[i]?x[i]:xmax;
-			ymin = ymin>y[i]?y[i]:ymin;
-			ymax = ymax<y[i]?y[i]:ymax;
+			xmin = xmin > x[i] ? x[i] : xmin;
+			xmax = xmax < x[i] ? x[i] : xmax;
+			ymin = ymin > y[i] ? y[i] : ymin;
+			ymax = ymax < y[i] ? y[i] : ymax;
 		}
 	}
 }

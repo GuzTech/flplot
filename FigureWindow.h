@@ -28,17 +28,15 @@ private:
 public:
 	FigureWindow(int w, int h, const char * lb, size_t rows = 1,size_t cols = 1);
 	virtual ~FigureWindow();
-	void plot(size_t len,
-			 double * x,
-			 double * y,
-			 const int style = FL_SOLID,
-			 const int width=1,
-			 const Fl_Color col = FL_BLACK,
-			 const size_t sbplt=0);
-	inline void plot(size_t len,
-			     double * x,
-				 double * y,
-				 const size_t sbplt=0);
+	void plot(const std::vector<double> &x,
+			  const std::vector<double> &y,
+			  const int                 style = FL_SOLID,
+			  const int                 width = 1,
+			  const Fl_Color            col   = FL_BLACK,
+			  const size_t              sbplt = 0);
+	inline void plot(const std::vector<double> &x,
+					 const std::vector<double> &y,
+					 const size_t              sbplt = 0);
 	void grid(bool on = true, const size_t sbplt=0);
 	void xlabel(const char * str = "", const size_t sbplt=0);
 	void ylabel(const char * str = "", const size_t sbplt=0);

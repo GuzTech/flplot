@@ -7,42 +7,43 @@
 
 #include "PlotData.h"
 
-PlotData::PlotData(const ulong len,
-				   const int style,
-				   const int width,
-				   const Fl_Color col) {
-	this->style = style;
-	this->width = width;
-	this->col = col;
-	this->len = len;
-	this->x = std::shared_ptr<double[]>(new double[len]);
-	this->y = std::shared_ptr<double[]>(new double[len]);
+PlotData::PlotData(const ulong    len,
+				   const int      style,
+				   const int      width,
+				   const Fl_Color col)
+	: style(style)
+	, width(width)
+	, col(col)
+	, xmin(0)
+	, ymin(0)
+	, xmax(0)
+	, ymax(0)
+	, len(len)
+{
+	x.reserve(len);
+	y.reserve(len);
 }
 
-PlotData::PlotData(const std::vector<double> &x,
-				   const std::vector<double> &y,
+PlotData::PlotData(const std::vector<double> &_x,
+				   const std::vector<double> &_y,
 				   const int 				 style,
 				   const int 				 width,
 				   const Fl_Color 			 col)
 	: style(style)
 	, width(width)
 	, col(col)
-	, len(x.size())
+	, len(_x.size())
 {
-	this->x = std::shared_ptr<double[]>(new double[len]);
-	this->y = std::shared_ptr<double[]>(new double[len]);
-
 	if(len >= 1) {
-		xmin = x[0];
+		xmin = _x[0];
 		xmax = xmin;
-		ymin = y[0];
+		ymin = _y[0];
 		ymax = ymin;
-		this->x[0] = x[0];
-		this->y[0] = y[0];
+
+		x = _x;
+		y = _y;
 
 		for (ulong i = 1 ; i < len; ++i) {
-			this->x[i] = x[i];
-			this->y[i] = y[i];
 			xmin = xmin > x[i] ? x[i] : xmin;
 			xmax = xmax < x[i] ? x[i] : xmax;
 			ymin = ymin > y[i] ? y[i] : ymin;
@@ -51,17 +52,17 @@ PlotData::PlotData(const std::vector<double> &x,
 	}
 }
 
-void PlotData::getXlim(double & xmin, double & xmax)
+void PlotData::getXlim(double &xmin, double &xmax)
 {
 	xmin = this->xmin;
 	xmax = this->xmax;
 }
-void PlotData::getYlim(double & ymin, double & ymax)
+void PlotData::getYlim(double &ymin, double &ymax)
 {
 	ymin = this->ymin;
 	ymax = this->ymax;
 }
-void PlotData::setVal(ulong idx, double nx, double ny)
+void PlotData::setVal(const ulong idx, const double nx, const double ny)
 {
 	if(idx >= 0 && idx < len)
 	{
@@ -69,7 +70,7 @@ void PlotData::setVal(ulong idx, double nx, double ny)
 		y[idx] = ny;
 	}
 }
-void PlotData::getVal(ulong idx, double & nx, double & ny)
+void PlotData::getVal(const ulong idx, double &nx, double &ny)
 {
 	if(idx >= 0 && idx < len)
 	{

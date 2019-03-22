@@ -47,7 +47,6 @@ int main() {
 	arrayfun(t, y, [](const double x){return 0.5 - 0.5 * exp(-x);});
 
 	FigureWindow fig(640, 480, "Figure 1", 1, 2);
-	//fig.plot(N, t.data(), x.data(), FL_SOLID, 2, FL_RED, 0);
 	fig.plot(t, x, FL_SOLID, 2, FL_RED, 0);
 	fig.hold(true);
 	fig.plot(t, y, FL_DASH,  2, FL_BLUE, 0);

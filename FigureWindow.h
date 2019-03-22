@@ -10,6 +10,7 @@
 
 #include <FL/Fl_Double_Window.H>
 #include <array>
+#include <string>
 #include "PlotWidget.h"
 
 class FigureWindow: public Fl_Double_Window {
@@ -17,16 +18,20 @@ public:
 	static const size_t MAX_ROWS = 5;
 	static const size_t MAX_COLS = 10;
 private:
-	static const int CAP_SPC = 25;
+	static const int CAP_SPC  = 25;
 	static const int XLBL_SPC = 20;
 	static const int YLBL_SPC = 20;
 	typedef std::shared_ptr<PlotWidget> pwptr;
 
 	size_t rows, cols;
 
-	std::array<std::shared_ptr<PlotWidget>,MAX_ROWS*MAX_COLS> plots;
+	std::array<pwptr, MAX_ROWS * MAX_COLS> plots;
 public:
-	FigureWindow(int w, int h, const char * lb, size_t rows = 1,size_t cols = 1);
+	FigureWindow(const int         w,
+				 const int         h,
+				 const std::string lb,
+				 const size_t      rows = 1,
+				 const size_t 	   cols = 1);
 	virtual ~FigureWindow();
 	void plot(const std::vector<double> &x,
 			  const std::vector<double> &y,
@@ -37,14 +42,11 @@ public:
 	inline void plot(const std::vector<double> &x,
 					 const std::vector<double> &y,
 					 const size_t              sbplt = 0);
-	void grid(bool on = true, const size_t sbplt=0);
-	void xlabel(const char * str = "", const size_t sbplt=0);
-	void ylabel(const char * str = "", const size_t sbplt=0);
-	void caption(const char * str = "", const size_t sbplt=0);
-	void hold(bool on = true, const size_t sbplt=0);
+	void grid(const bool on = true, const size_t sbplt = 0);
+	void xlabel(const std::string &str, const size_t sbplt = 0);
+	void ylabel(const std::string &str, const size_t sbplt = 0);
+	void caption(const std::string &str, const size_t sbplt = 0);
+	void hold(const bool on = true, const size_t sbplt = 0);
 };
-
-//const FigureWindow * gcf();
-//bool plot(size_t splot, double * x, double * y, const char * style = "-", const FigureWindow * fig = gcf());
 
 #endif /* FIGUREWINDOW_H_ */

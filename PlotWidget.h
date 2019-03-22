@@ -18,7 +18,11 @@
 class PlotWidget : public Fl_Widget
 {
 private:
-	struct datatip {double x,y;ulong plt;int lx,ly; };
+	struct datatip {
+		double x,y;
+		ulong plt;
+		int lx,ly;
+	};
 	typedef std::shared_ptr<PlotData> pdptr;
 	typedef std::vector<datatip> dtipvec;
 	std::vector<pdptr> data;
@@ -35,19 +39,19 @@ private:
 
 	int xngrid = 5, yngrid = 5;
 
-	bool getClosestPt(datatip & tip, int mx, int my, double wd, double ht);
-	dtipvec::iterator getClosestDt(int mx, int my, double wd, double ht);
+	bool getClosestPt(datatip &tip, const int mx, const int my, const double wd, const double ht);
+	dtipvec::iterator getClosestDt(const int mx, const int my, const double wd, const double ht);
 public:
-	PlotWidget(int x, int y, int w, int h, const char * cap="");
+	PlotWidget(const int x, const int y, const int w, const int h, const std::string cap);
 	virtual ~PlotWidget();
-	int handle(int event);
+	int handle(const int event);
 	void draw();
 	void putData(const std::vector<double> &x, const std::vector<double> &y, const int style = FL_SOLID, const int width = 1, const Fl_Color col = FL_BLACK);
-	inline void setGrid(bool on = true) { grid = on; redraw(); }
-	inline void setXLabel(const char * str) { xlabel = str; redraw(); };
-	inline void setYLabel(const char * str) { ylabel = str; redraw(); };
-	inline void setCaption(const char * str) { caption = str; redraw(); };
-	inline void setHold(bool on = true) { hold = on; }
+	inline void setGrid(const bool on = true) { grid = on; redraw(); }
+	inline void setXLabel(const std::string str) { xlabel = str; redraw(); };
+	inline void setYLabel(const std::string str) { ylabel = str; redraw(); };
+	inline void setCaption(const std::string str) { caption = str; redraw(); };
+	inline void setHold(const bool on = true) { hold = on; }
 };
 
 #endif /* PLOTWIDGET_H_ */

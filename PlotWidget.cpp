@@ -11,36 +11,38 @@
 #include <cinttypes>
 #include <cstdlib>
 #include <memory>
+#include <string>
 
-PlotWidget::PlotWidget(int x, int y, int w, int h, const char * cap) :
-	Fl_Widget(x,y,w,h,cap)
+PlotWidget::PlotWidget(const int x, const int y, const int w, const int h, const std::string cap)
+	: Fl_Widget(x, y, w, h, cap.c_str())
+	, xlabel("x")
+	, ylabel("y")
+	, caption(cap)
+	, lim({0, (double)w, 0, (double)h})
+	, limc(lim)
 {
-	caption = cap;
-	xlabel = "x";
-	ylabel = "y";
-	lim = {0,(double)w,0,(double)h};
-	limc = lim;
 }
 
 PlotWidget::~PlotWidget() {
 	// TODO Auto-generated destructor stub
 }
 
-bool PlotWidget::getClosestPt(datatip & tip, int mx, int my, double wd, double ht) {
-	double mdist = w()*w()+h()*h();
-	for(ulong j = 0;j < this->data.size();j++) {
-		pdptr dat = this->data[j];
-		for(ulong i = 0;i < dat->size();i++) {
-			double px,py;
-			//First get the data
-			dat->getVal(i,px,py);
-			//Scale and shift
-			px = ((px - limc.xl)/wd)*w() + x();
-			py = h() - ((py - limc.yl)/ht)*h() + y();
+bool PlotWidget::getClosestPt(datatip &tip, const int mx, const int my, const double wd, const double ht) {
+	double mdist = w() * w() + h() * h();
 
-			double dist = std::max(abs(px-mx),abs(py-my));
+	for(ulong j = 0; j < data.size(); ++j) {
+		const pdptr dat = data[j];
+		for(ulong i = 0; i < dat->size(); ++i) {
+			double px, py;
+			//First get the data
+			dat->getVal(i, px, py);
+			//Scale and shift
+			px = ((px - limc.xl) / wd) * w() + x();
+			py = h() - ((py - limc.yl) / ht) * h() + y();
+
+			const double dist = std::max(abs(px - mx), abs(py - my));
 			if(dist < mdist) {
-				dat->getVal(i,px,py);
+				dat->getVal(i, px, py);
 				mdist = dist;
 				tip.x = px;
 				tip.y = py;
@@ -51,12 +53,13 @@ bool PlotWidget::getClosestPt(datatip & tip, int mx, int my, double wd, double h
 	return mdist <= 10;
 }
 
-PlotWidget::dtipvec::iterator PlotWidget::getClosestDt(int mx, int my, double wd, double ht) {
+PlotWidget::dtipvec::iterator PlotWidget::getClosestDt(const int mx, const int my, const double wd, const double ht) {
 	dtipvec::iterator it;
-	for(it = datatips.begin();it != datatips.end();it++) {
-		double px = ((it->x - limc.xl)/wd)*w() + x(),
-				py = h() - ((it->y - limc.yl)/ht)*h() + y();
-		double dist = std::max(abs(px-mx),abs(py-my));
+	for(it = datatips.begin(); it != datatips.end(); ++it) {
+		const double px = ((it->x - limc.xl) / wd) * w() + x();
+		const double py = h() - ((it->y - limc.yl) / ht) * h() + y();
+		const double dist = std::max(abs(px - mx), abs(py - my));
+
 		//First check if we're close to the data-tip point
 		if(dist < 15) {
 			break; //No-need to continue further, since we don't care about closer data-tips
@@ -285,11 +288,12 @@ void PlotWidget::draw()
 
 	//Zoom-box
 	if(zooming) {
-		int mx = Fl::event_x(),
-				my = Fl::event_y();
-		int dx = mx-zoomx, dy = my-zoomy;
+		const int mx = Fl::event_x();
+		const int my = Fl::event_y();
+		const int dx = mx - zoomx;
+		const int dy = my - zoomy;
 		fl_line_style(FL_DASH);
-		fl_rect(std::min(zoomx,zoomx+dx),std::min(zoomy,zoomy+dy),abs(dx),abs(dy));
+		fl_rect(std::min(zoomx, zoomx + dx), std::min(zoomy, zoomy + dy), abs(dx), abs(dy));
 	}
 
 	fl_pop_clip();
@@ -301,13 +305,15 @@ void PlotWidget::putData(const std::vector<double> &x,
 						 const int                 width,
 						 const Fl_Color            col)
 {
-	pdptr data = pdptr(new PlotData(x,y,style,width,col));
-	double xmin,xmax,ymin,ymax;
+	pdptr data = std::make_shared<PlotData>(x, y, style, width, col);
+	double xmin, xmax, ymin, ymax;
 
 	if (!hold)
 		this->data.clear();
+
 	data->getXlim(xmin, xmax);
 	data->getYlim(ymin, ymax);
+
 	if (this->data.empty())
 	{
 		lim = {xmin, xmax, ymin, ymax};

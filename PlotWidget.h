@@ -17,20 +17,27 @@
 
 class PlotWidget : public Fl_Widget
 {
+public:
+	enum PlotType { PLOT, STEM };
 private:
 	struct datatip {
 		double x,y;
-		ulong plt;
+		size_t plt;
 		int lx,ly;
 	};
+
 	typedef std::shared_ptr<PlotData> pdptr;
 	typedef std::vector<datatip> dtipvec;
-	std::vector<pdptr> data;
+	struct plot {
+		pdptr data;
+		PlotType type;
+	};
+	std::vector<plot> data;
 	std::string xlabel, ylabel, caption;
 	dtipvec datatips;
 	struct { double xl,xr,yl,yr; } lim, limc;
 
-	ulong cur_dtip = 0;
+	size_t cur_dtip = 0;
 	dtipvec::iterator cdtip;
 	bool zooming = false,
 		 grid = false,
@@ -46,7 +53,7 @@ public:
 	virtual ~PlotWidget();
 	int handle(const int event);
 	void draw();
-	void putData(const std::vector<double> &x, const std::vector<double> &y, const int style = FL_SOLID, const int width = 1, const Fl_Color col = FL_BLACK);
+	void putData(const std::vector<double> &x, const std::vector<double> &y, const int style = FL_SOLID, const int width = 1, const Fl_Color col = FL_BLACK, const PlotType type = PLOT);
 	inline void setGrid(const bool on = true) { grid = on; redraw(); }
 	inline void setXLabel(const std::string str) { xlabel = str; redraw(); };
 	inline void setYLabel(const std::string str) { ylabel = str; redraw(); };

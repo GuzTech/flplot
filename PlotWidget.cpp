@@ -31,9 +31,10 @@ PlotWidget::~PlotWidget() {
 bool PlotWidget::getClosestPt(datatip &tip, const int mx, const int my, const double wd, const double ht) {
 	double mdist = w() * w() + h() * h();
 
-	for(ulong j = 0; j < data.size(); ++j) {
-		const pdptr dat = data[j];
-		for(ulong i = 0; i < dat->size(); ++i) {
+	for(size_t j = 0; j < data.size(); ++j) {
+		const plot &plt = data[j];
+		const pdptr dat = plt.data;
+		for(size_t i = 0; i < dat->size(); ++i) {
 			double px, py;
 			//First get the data
 			dat->getVal(i, px, py);
@@ -114,9 +115,11 @@ int PlotWidget::handle(int event)
 		if(Fl::event_inside(this)) {
 			if(Fl::event_button() == FL_LEFT_MOUSE) {
 				if(!zooming && cdtip != datatips.end()) {
-					pdptr dat = this->data[cdtip->plt];
+					const plot &plt = this->data[cdtip->plt];
+					const pdptr dat = plt.data;
+
 					double mdist = w()*w()+h()*h();
-					for(ulong i = 0;i < dat->size();i++) {
+					for(size_t i = 0;i < dat->size();i++) {
 						double px,py;
 						//First get the data
 						dat->getVal(i,px,py);
@@ -280,20 +283,44 @@ void PlotWidget::draw()
 	}
 
 	//Plot the data
-	for(pdptr dat : data) {
-		fl_color(dat->col);
-		fl_line_style(dat->style,dat->width);
-		fl_begin_line();
-		for(ulong i = 0;i < dat->size();i++)
-		{
-			double px,py;
-			dat->getVal(i,px,py);
-			//Scale and shift
-			px = ((px - limc.xl)/wd)*w() + x();
-			py = h() - ((py - limc.yl)/ht)*h() + y();
-			fl_vertex((int)px, (int)py);
+	for(plot &dat : data) {
+		fl_color(dat.data->col);
+		fl_line_style(dat.data->style, dat.data->width);
+
+		switch(dat.type) {
+		case PLOT: {
+			fl_begin_line();
+			for(size_t i = 0;i < dat.data->size();i++)
+			{
+				double px,py;
+				dat.data->getVal(i,px,py);
+				//Scale and shift
+				px = ((px - limc.xl)/wd)*w() + x();
+				py = h() - ((py - limc.yl)/ht)*h() + y();
+				fl_vertex((int)px, (int)py);
+			}
+			fl_end_line();
+		} break;
+		case STEM: {
+			for(size_t i = 0; i < dat.data->size(); i++)
+			{
+				fl_begin_line();
+
+				double px, py, p0;
+				dat.data->getVal(i, px, py);
+
+				//Scale and shift
+				px = ((px - limc.xl) / wd) * w() + x();
+				py = h() - ((py - limc.yl) / ht) * h() + y();
+				p0 = h() - (-limc.yl / ht) * h() + y();
+
+				fl_vertex((int)px, p0);
+				fl_vertex((int)px, (int)py);
+
+				fl_end_line();
+			}
+		} break;
 		}
-		fl_end_line();
 	}
 
 	fl_color(FL_BLACK);
@@ -328,9 +355,11 @@ void PlotWidget::putData(const std::vector<double> &x,
 						 const std::vector<double> &y,
 						 const int                 style,
 						 const int                 width,
-						 const Fl_Color            col)
+						 const Fl_Color            col,
+						 const PlotType            type)
 {
 	pdptr data = std::make_shared<PlotData>(x, y, style, width, col);
+
 	double xmin, xmax, ymin, ymax;
 
 	if (!hold)
@@ -353,5 +382,5 @@ void PlotWidget::putData(const std::vector<double> &x,
 		};
 		limc = lim;
 	}
-	this->data.push_back(data);
+	this->data.push_back({data, type});
 }

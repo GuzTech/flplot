@@ -7,7 +7,7 @@
 
 #include "PlotData.h"
 
-PlotData::PlotData(const ulong    len,
+PlotData::PlotData(const size_t    len,
 				   const int      style,
 				   const int      width,
 				   const Fl_Color col)
@@ -43,7 +43,7 @@ PlotData::PlotData(const std::vector<double> &_x,
 		x = _x;
 		y = _y;
 
-		for (ulong i = 1 ; i < len; ++i) {
+		for (size_t i = 1 ; i < len; ++i) {
 			xmin = xmin > x[i] ? x[i] : xmin;
 			xmax = xmax < x[i] ? x[i] : xmax;
 			ymin = ymin > y[i] ? y[i] : ymin;
@@ -62,7 +62,7 @@ void PlotData::getYlim(double &ymin, double &ymax)
 	ymin = this->ymin;
 	ymax = this->ymax;
 }
-void PlotData::setVal(const ulong idx, const double nx, const double ny)
+void PlotData::setVal(const size_t idx, const double nx, const double ny)
 {
 	if(idx >= 0 && idx < len)
 	{
@@ -75,7 +75,7 @@ void PlotData::setVal(const ulong idx, const double nx, const double ny)
 		ymax = ymax < ny ? ny : ymax;
 	}
 }
-void PlotData::getVal(const ulong idx, double &nx, double &ny)
+void PlotData::getVal(const size_t idx, double &nx, double &ny)
 {
 	if(idx >= 0 && idx < len)
 	{

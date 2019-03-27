@@ -15,7 +15,7 @@ void FigureWindow::plot(
 		const Fl_Color col,
 		const size_t sbplt) {
 	if (sbplt < (rows * cols) && sbplt >= 0) {
-		plots[sbplt]->putData(x, y, style, width, col);
+		plots[sbplt]->putData(x, y, style, width, col, PlotWidget::PlotType::PLOT);
 	}
 }
 
@@ -24,6 +24,25 @@ inline void FigureWindow::plot(
 				 const std::vector<double> &y,
 				 const size_t sbplt) {
 	plot(x, y, FL_SOLID, 1, FL_BLACK, sbplt);
+}
+
+void FigureWindow::stem(
+		const std::vector<double> &x,
+		const std::vector<double> &y,
+		const int style,
+		const int width,
+		const Fl_Color col,
+		const size_t sbplt) {
+	if (sbplt < (rows * cols) && sbplt >= 0) {
+		plots[sbplt]->putData(x, y, style, width, col, PlotWidget::PlotType::STEM);
+	}
+}
+
+inline void FigureWindow::stem(
+			     const std::vector<double> &x,
+				 const std::vector<double> &y,
+				 const size_t sbplt) {
+	stem(x, y, FL_SOLID, 1, FL_BLACK, sbplt);
 }
 
 void FigureWindow::grid(bool on, const size_t sbplt) {

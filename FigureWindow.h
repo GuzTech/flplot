@@ -42,6 +42,15 @@ public:
 	inline void plot(const std::vector<double> &x,
 					 const std::vector<double> &y,
 					 const size_t              sbplt = 0);
+	void stem(const std::vector<double> &x,
+			  const std::vector<double> &y,
+			  const int                 style = FL_SOLID,
+			  const int                 width = 1,
+			  const Fl_Color            col   = FL_BLACK,
+			  const size_t              sbplt = 0);
+	inline void stem(const std::vector<double> &x,
+					 const std::vector<double> &y,
+					 const size_t              sbplt = 0);
 	void grid(const bool on = true, const size_t sbplt = 0);
 	void xlabel(const std::string &str, const size_t sbplt = 0);
 	void ylabel(const std::string &str, const size_t sbplt = 0);

@@ -15,13 +15,13 @@
 
 using namespace std;
 
-void linspace(vector<double> &arr, const double l, const double r, const ulong len) {
+void linspace(vector<double> &arr, const double l, const double r, const size_t len) {
 	const double dx = (r - l) / (len - 1);
 
 	// Reserve enough space so that we do not have to reallocate more memory.
 	arr.reserve(len);
 
-	for (ulong i = 0; i < len; ++i) {
+	for (size_t i = 0; i < len; ++i) {
 		arr[i] = l + (i * dx);
 	}
 }
@@ -32,12 +32,12 @@ void arrayfun(const vector<double> &in, vector<double> &out, double (*fun)(doubl
 	// more memory while calling push_back over and over again.
 	out.reserve(in.size());
 
-	for (ulong i = 0; i < in.size(); ++i)
+	for (size_t i = 0; i < in.size(); ++i)
 		out[i] = fun(in[i]);
 }
 
 int main() {
-	const ulong N = 1000;
+	const size_t N = 1000;
 	vector<double> t(N),
 				   x(N),
 				   y(N);
@@ -47,7 +47,7 @@ int main() {
 	arrayfun(t, y, [](const double x){return 0.5 - 0.5 * exp(-x);});
 
 	FigureWindow fig(640, 480, "Figure 1", 1, 2);
-	fig.plot(t, x, FL_SOLID, 2, FL_RED, 0);
+	fig.stem(t, x, FL_SOLID, 2, FL_RED, 0);
 	fig.hold(true);
 	fig.plot(t, y, FL_DASH,  2, FL_BLUE, 0);
 	fig.hold(false);
@@ -64,7 +64,7 @@ int main() {
 	fig.grid(true, 1);
 
 	FigureWindow fig2(640, 480, "Figure 2");
-	fig2.plot(t, x, 0);
+	fig2.stem(t, x, 0);
 
 	fig.show();
 	fig2.show();

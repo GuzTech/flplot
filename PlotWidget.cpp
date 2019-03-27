@@ -316,8 +316,9 @@ void PlotWidget::draw()
 
 				fl_vertex((int)px, p0);
 				fl_vertex((int)px, (int)py);
-
 				fl_end_line();
+
+				fl_circle(px, py, 4);
 			}
 		} break;
 		}

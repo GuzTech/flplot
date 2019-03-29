@@ -7,7 +7,7 @@
 
 #include "PlotData.h"
 
-PlotData::PlotData(const size_t    len,
+PlotData::PlotData(const size_t   len,
 				   const int      style,
 				   const int      width,
 				   const Fl_Color col)

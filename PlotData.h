@@ -32,11 +32,13 @@ public:
 	int width;
 	Fl_Color col;
 
-private:
+protected:
 	std::vector<double> x, y;
 	double xmin, ymin;
 	double xmax, ymax;
 	size_t len;
 };
+
+typedef std::shared_ptr<PlotData> pdptr;
 
 #endif /* PLOTDATA_H_ */

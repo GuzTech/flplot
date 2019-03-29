@@ -23,7 +23,7 @@ protected:
 public:
 	Graph2DWidget(const int x, const int y, const int w, const int h, const std::string cap);
 	virtual ~Graph2DWidget();
-	int handle(const int event);
+	virtual int handle(const int event);
 	void putData(const std::vector<double> &x,
 				 const std::vector<double> &y,
 				 const int                 style = FL_SOLID,
